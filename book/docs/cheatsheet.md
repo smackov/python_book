@@ -46,7 +46,7 @@ My *basic* recommendation for learning how line breaks work is to ***experiment*
 ## Links
 
 First link: [google](https://google.com)
-Second link: [Sting in JS](./first.html)
+Second link: [Sting in JS]
 Third link: [Markdown cheatsheet][1]
 
 [1]: (https://github.com/adam-p/markdown-here/wiki/Markdown-Here-Cheatsheet)

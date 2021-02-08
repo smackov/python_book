@@ -6,7 +6,7 @@
 
 Для создания типа данных как файл, используется функция `open()`. Синтаксис функции:
 
-      `open(filename[, mode])`
+      open(filename[, mode])
 
 `filename` - обязательный аттрибут. Это должен быть полный путь до файла, либо только его имя, если он находится в папке интерпретатора Python.
 `mode` - режим работы с файлом. По умолчанию 'rt' - файл доступен только для чтения в текстовом режиме.
@@ -29,7 +29,11 @@
 >>> f = open('newfile.txt')
 >>> f
 <_io.TextIOWrapper name='/Users/admin/Developer/Python/newfile.txt' mode='r' encoding='UTF-8'>
+```
 
+Это тоже самое, что и пример ниже:
+
+```python
 >>> f = open('newfile.txt', 'rt')
 >>> f
 <_io.TextIOWrapper name='/Users/admin/Developer/Python/newfile.txt' mode='r' encoding='UTF-8'>
@@ -94,51 +98,92 @@ Hi, there!
 
 `'w'` - режим записи файла. Особенность метода заключается в том, что если файл уже существует, то он сотрет все содержимое при открытии.
 `'a'` - режим добавления. Режим такой же, как и `'w'`, но он ничего не стирает, а при записи данных добавляет их в конец файла.
+
+Давайте попробуем добавить в файл `newfile.txt`, с которым мы работали выше, пару новых строчек:
   
 ```python
-
+>>> f = open('/Users/admin/Developer/Python/newfile.txt', 'a')
+>>> f.write("It is the append mode.\nIt doesn't overwrite existing text!")
+58
+>>> f.close()
 ``` 
+
+Мы воспользовались режимом `'a'` (append), который добавляет новые данные в конец файла. Давайте убедимся в этом:
   
 ```python
-
+>>> f = open('/Users/admin/Developer/Python/newfile.txt')
+>>> print(f.read())
+Hello, world!
+Hi, there!It is the append mode.
+It doesn't overwrite existing text!
+>>> f.close()
 ``` 
+
+Все верно. Теперь воспользуемся режимом `'w'` (write), с помощью которого перепишем весь текст на новый:
   
 ```python
-
+>>> f = open('/Users/admin/Developer/Python/newfile.txt', 'w')
+>>> f.write("It's the write mode!")
+20
+>>> f.close()
+>>>
+>>> f = open('/Users/admin/Developer/Python/newfile.txt')
+>>> f.read()
+"It's the write mode!"
+>>> f.close()
 ``` 
+
+Заметим, что для чтения файла необходим режим `'r'`:
   
 ```python
-
+>>> f = open('/Users/admin/Developer/Python/newfile.txt', 'a')
+>>> f.read()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+io.UnsupportedOperation: not readable
 ``` 
+
+## Создание файлов
+
+Для создания файла подходят 3 режима:
+- `'w'` - write mode
+- `'a'` - append mode
+- `'x'` - create mode
+
+С первыми двумя режимами мы знакомы. Если файл не существует, то при вызове этих режимов он создается автоматически, если существует, то программа продолжает работать, как и запланировано.
+
+Режим создания файла `'x'` также создает файл, если он не существует, но если он уже существует на момент выполнения программы, то появится ошибка `FileExistsError`:
   
 ```python
-
+>>> f = open('/Users/admin/Developer/Python/newfile.txt', 'x')
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+FileExistsError: [Errno 17] File exists: '/Users/admin/Developer/Python/newfile.txt'
 ``` 
+
+## Удаление файлов
+  
+Для удаления файлов и папок Python имеет в своей библиотеке модуль `os`.
+
+Для удаления файла необходимо воспользоваться методом `os.remove()`, передав ему путь до целевого файла:
+
+```python
+>>> import os
+>>> os.remove('/Users/admin/Developer/Python/newfile.txt')
+``` 
+
+Однако, файл может быть перенесен или удален к тому времени, когда наша программа будем выполнять данную команду. Поэтому на практике данная операция оборачивается в конструкцию `try...except...`:
   
 ```python
+>>> path = '/Users/admin/Developer/Python/newfile.txt'
+>>> if os.path.exists(path):
+...     os.remove(path)
+... else:
+...     print("File doesn't exist")
+...
+>>>
+```
 
-``` 
-  
-```python
+## Заключение
 
-``` 
-  
-```python
-
-``` 
-  
-```python
-
-``` 
-  
-```python
-
-``` 
-  
-```python
-
-``` 
-  
-```python
-
-``` 
+Работа с файлами в файловой системы компьютера - это возможность сохранения результата работы программы в долговременной памяти, возможность создания более сложных программ, отличный инструмент и другое.
